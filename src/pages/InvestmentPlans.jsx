@@ -1,0 +1,8 @@
+export default function InvestmentPlans() {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen">
+      <h1 className="text-3xl font-bold">Planes de Inversión 💸</h1>
+      <p className="text-gray-600 mt-4">Aquí irán los detalles de los planes.</p>
+    </div>
+  );
+}
