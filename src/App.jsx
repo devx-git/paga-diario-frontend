@@ -1,8 +1,10 @@
+import PrivateRoute from "./components/PrivateRoute";
 import Homepage from "./pages/Homepage"; // ✅ Importar
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Perfil from "./pages/Perfil";
 import BuyPlan from "./pages/BuyPlan";
 import Payment from "./pages/Payment";
 import UserProfile from "./pages/UserProfile";
@@ -22,6 +24,7 @@ function App() {
       <Route path="/perfil" element={<UserProfile />} />
       <Route path="/admin" element={<AdminPanel />} />
       <Route path="/plan-finalizado" element={<PlanFinalizado />} />
+      <Route path="/perfil" element={<PrivateRoute><Perfil /></PrivateRoute>}/>
     </Routes>
   );
 }

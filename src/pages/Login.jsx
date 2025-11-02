@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
+import axiosClient from "../api/axiosClient";
+
 
 export default function Login() {
   const [form, setForm] = useState({ correo: "", password: "" });
@@ -13,15 +15,23 @@ export default function Login() {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await loginUser(form);
-      login(res.token, res.user);
-      navigate("/dashboard");
-    } catch {
-      setError("Credenciales incorrectas o error del servidor.");
-    }
-  };
+  e.preventDefault();
+  try {
+    const res = await axiosClient.post("/api/auth/login", form);
+    login(res.data.token, res.data.user); // guarda token y usuario en contexto
+    navigate("/dashboard");
+  } catch (err) {
+  console.error("❌ Error en login:", err.response?.data || err.message);
+  if (err.response?.status === 401) {
+    setError("Correo o contraseña incorrectos.");
+  } else if (err.response?.status === 500) {
+    setError("Error interno del servidor.");
+  } else {
+    setError("Error inesperado al iniciar sesión.");
+  }
+}
+
+};
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-gray-50 px-4">

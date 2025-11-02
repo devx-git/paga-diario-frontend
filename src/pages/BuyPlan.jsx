@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import axiosClient from "../api/axiosClient";
 
 export default function BuyPlan() {
   const { token } = useAuth();
@@ -10,11 +11,26 @@ export default function BuyPlan() {
   const plans = Array.from({ length: 10 }, (_, i) => {
     const base = 100 * (i + 1);
     return {
+      id: i + 1,
       nivel: i + 1,
       inversion: base,
       mensual: base * 0.4,
     };
   });
+
+  const handleBuy = async (planId) => {
+  try {
+    const res = await axiosClient.post("/api/compras", { planId }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    console.log("✅ Compra exitosa:", res.data);
+    // Aquí puedes mostrar un mensaje o actualizar el historial
+  } catch (error) {
+    console.error("❌ Error al comprar:", error.response?.data?.message || error.message);
+  }
+};
 
   const seleccionarPlan = async (plan) => {
     try {
@@ -36,10 +52,10 @@ export default function BuyPlan() {
             <p>Inversión: ${plan.inversion}</p>
             <p>Ganancia mensual: ${plan.mensual}</p>
             <button
-              onClick={() => seleccionarPlan(plan)}
-              className="mt-2 bg-blue-600 text-white px-4 py-2 rounded w-full"
-            >
-              Comprar
+              onClick={() => handleBuy(plan.id)}
+                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+              >
+                Comprar Plan
             </button>
           </div>
         ))}
