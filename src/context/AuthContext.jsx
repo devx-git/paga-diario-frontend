@@ -9,11 +9,13 @@ export function AuthProvider({ children }) {
   const login = (data) => {
     setUser(data.user);
     setToken(data.token);
+    localStorage.setItem("token", data.token); // ✅ guarda el token
   };
 
   const logout = () => {
     setUser(null);
     setToken(null);
+    localStorage.removeItem("token"); // ✅ elimina el token
   };
 
   return (

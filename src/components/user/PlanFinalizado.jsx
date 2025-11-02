@@ -64,36 +64,41 @@ export default function PlanFinalizado() {
       <h2 className="text-2xl font-bold mb-4">Tu plan ha finalizado</h2>
       {msg && <p className="mb-4 text-green-600">{msg}</p>}
 
-      {plan && dias >= 30 ? (
-        <div className="bg-white p-4 rounded shadow">
-          <p><strong>Plan:</strong> Nivel {plan.nivel}</p>
-          <p><strong>Inversión:</strong> ${plan.inversion}</p>
-          <p><strong>Saldo acumulado:</strong> ${saldo.toFixed(2)}</p>
+      {plan ? (
+          dias >= 30 ? (
+            <div className="bg-[#1E3A8A] p-4 rounded shadow text-white">
+              <p><strong>Plan:</strong> Nivel {plan.nivel}</p>
+              <p><strong>Inversión:</strong> ${plan.inversion}</p>
+              <p><strong>Saldo acumulado:</strong> ${saldo.toFixed(2)}</p>
 
-          <div className="mt-4 grid gap-4">
-            <button
-              onClick={retirar}
-              className="bg-green-600 text-white px-4 py-2 rounded"
-            >
-              Retirar saldo
-            </button>
-            <button
-              onClick={reinvertir}
-              className="bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Reinvertir saldo
-            </button>
-            <button
-              onClick={() => window.location.href = "/comprar"}
-              className="bg-purple-600 text-white px-4 py-2 rounded"
-            >
-              Invertir en otro plan
-            </button>
-          </div>
-        </div>
-      ) : (
-        <p className="text-gray-600">Tu plan aún está en curso ({dias}/30 días)</p>
-      )}
+              <div className="mt-4 grid gap-4">
+                <button
+                  onClick={retirar}
+                  className="bg-[#D4AF37] text-[#0F172A] px-4 py-2 rounded font-semibold"
+                >
+                  Retirar saldo
+                </button>
+                <button
+                  onClick={reinvertir}
+                  className="bg-blue-600 text-white px-4 py-2 rounded"
+                >
+                  Reinvertir saldo
+                </button>
+                <button
+                  onClick={() => window.location.href = "/comprar"}
+                  className="bg-purple-600 text-white px-4 py-2 rounded"
+                >
+                  Invertir en otro plan
+                </button>
+              </div>
+            </div>
+          ) : (
+            <p className="text-gray-600">Tu plan aún está en curso ({dias}/30 días)</p>
+          )
+        ) : (
+          <p className="text-gray-600">No tienes un plan activo</p>
+        )}
+
     </div>
   );
 }

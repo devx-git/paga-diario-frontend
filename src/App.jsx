@@ -7,6 +7,8 @@ import BuyPlan from "./pages/BuyPlan";
 import Payment from "./pages/Payment";
 import UserProfile from "./pages/UserProfile";
 import AdminPanel from "./pages/AdminPanel";
+import PlanFinalizado from "./components/user/PlanFinalizado";
+
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
       <Route path="/pago" element={<Payment />} />
       <Route path="/perfil" element={<UserProfile />} />
       <Route path="/admin" element={<AdminPanel />} />
+      <Route path="/plan-finalizado" element={<PlanFinalizado />} />
     </Routes>
   );
 }
