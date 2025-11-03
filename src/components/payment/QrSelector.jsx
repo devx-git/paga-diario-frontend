@@ -1,6 +1,6 @@
 export default function QrSelector({ metodo }) {
-  const qrNequi = "/qr/nequi.png";      // Ruta local o CDN
-  const qrDaviplata = "/qr/daviplata.png";
+  const qrNequi = "/qr-pago-nequi.png";      // Ruta local o CDN
+  const qrDaviplata = "/qr-pago-daviplata.png"; // Ruta local o CDN
 
   return (
     <div className="mb-4 text-center">

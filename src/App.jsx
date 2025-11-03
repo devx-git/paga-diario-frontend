@@ -21,7 +21,7 @@ function App() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/comprar" element={<BuyPlan />} />
       <Route path="/pago" element={<Payment />} />
-      <Route path="/perfil" element={<UserProfile />} />
+      {/* <Route path="/perfil" element={<UserProfile />} /> */}
       <Route path="/admin" element={<AdminPanel />} />
       <Route path="/plan-finalizado" element={<PlanFinalizado />} />
       <Route path="/perfil" element={<PrivateRoute><Perfil /></PrivateRoute>}/>

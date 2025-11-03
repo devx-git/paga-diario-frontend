@@ -1,25 +1,22 @@
 import { useEffect, useState } from "react";
 import axiosClient from "../api/axiosClient";
 import { useAuth } from "../context/AuthContext"; // ✅ Importa el contexto
+import { useNavigate } from "react-router-dom";
+
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const { token, user } = useAuth(); // ✅ Obtiene token y usuario desde el contexto
   const [planes, setPlanes] = useState([]);
   const [msg, setMsg] = useState("");
 
-  // ✅ Función para comprar un plan
-  const comprarPlan = async (planId) => {
-    try {
-      await axiosClient.post("/api/compras", { planId }, {
-        headers: { Authorization: `Bearer ${token}` } // ✅ Usa el token del contexto
-      });
-      setMsg("✅ Plan comprado exitosamente");
-    } catch (err) {
-      setMsg("❌ Error al comprar el plan");
-    }
-  };
+  const comprarPlan = (plan) => {
+  // Puedes guardar el plan en localStorage o contexto si quieres usarlo en otra vista
+  localStorage.setItem("planSeleccionado", JSON.stringify(plan));
+  navigate("/pago"); // Redirige a la pantalla de pago/resumen
+};
 
-  // ✅ Carga de planes al montar el componente
+   // ✅ Carga de planes al montar el componente
   useEffect(() => {
     console.log("Token desde contexto:", token);
     console.log("Usuario:", user);
@@ -54,7 +51,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {planes.map(plan => (
           <div key={plan.id} className="bg-[#1E3A8A] p-4 rounded shadow text-center">
-            <h3 className="text-xl font-semibold text-[#D4AF37] mb-2">{plan.nombre}</h3>
+            <h3 className="text-xl font-semibold text-[#D4AF37] mb-2">Llave {plan.numero}</h3>
             <p>Inversión: <strong>${plan.inversion}</strong></p>
             <p>Ganancia mensual: <strong>${plan.ganancia}</strong></p>
             <p>Goteo diario: <strong>${plan.diario}</strong></p>
