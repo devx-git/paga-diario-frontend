@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import axiosClient from "../../api/axiosClient";
 import QrSelector from "./QrSelector";
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function PaymentForm() {
   const { token } = useAuth();
@@ -10,7 +11,7 @@ export default function PaymentForm() {
   const params = new URLSearchParams(location.search);
   const nivel = params.get("nivel");
   const inversion = params.get("inversion");
-
+  const navigate = useNavigate();
   const [metodo, setMetodo] = useState("nequi");
   const [form, setForm] = useState({ nombre: "", celular: "", referencia: "" });
   const [msg, setMsg] = useState("");
@@ -32,6 +33,10 @@ export default function PaymentForm() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setMsg("✅ Pago registrado. Tu plan se activará en breve.");
+      // ✅ Redirige al perfil después de 1.5 segundos
+      setTimeout(() => {
+      navigate("/perfil");
+      }, 1500);
     } catch {
       setMsg("❌ Error al registrar el pago");
     }
