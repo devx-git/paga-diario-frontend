@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { Logo } from "./Logo"; // ✅ importa el logo
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -11,10 +12,10 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50">
+    <header className="bg-white shadow-md sticky top-0 z-50 hidden md:block"> {/* ✅ solo desktop */}
       <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-        <Link to="/" className="text-xl font-bold text-blue-600">
-            Paga Diario
+        <Link to="/" className="flex items-center gap-2">
+          <Logo className="w-40 h-auto fill-[#1E3A8A] animate-fade-in" /> {/* ✅ logo azul */}
         </Link>
 
         <nav className="flex gap-4 items-center text-sm sm:text-base">

@@ -1,44 +1,51 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-
+import { Logo } from "./Logo";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { token, logout } = useAuth();
   const navigate = useNavigate();
 
-    const handleLogout = () => {
-      logout();
-      navigate("/login"); // 👈 redirige al login después de cerrar sesión
-    };
-
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
-    <nav className="bg-blue-600 text-white shadow-lg">
+    <nav className="bg-[#0F172A] text-white shadow-lg md:hidden"> {/* ✅ solo móviles */}
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold">logo</Link>
+        <Link to="/" className="flex items-center gap-2">
+          <Logo className="w-32 h-auto fill-[#D4AF37] animate-fade-in" /> {/* ✅ logo dorado en fondo oscuro */}
+        </Link>
 
-        <button
-          className="md:hidden"
-          onClick={() => setIsOpen(!isOpen)}
-        >
+        <button onClick={() => setIsOpen(!isOpen)} className="text-2xl z-50 relative">
           ☰
         </button>
 
-        <div className={`flex-col md:flex md:flex-row md:space-x-6 ${isOpen ? "flex" : "hidden"}`}>
+      </div>
+
+      <div className={`fixed top-0 left-0 h-full w-64 bg-[#0F172A] text-white transform transition-transform duration-300 z-50 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <div className="p-4 space-y-4">
           {!token ? (
             <>
-              <Link to="/login" className="hover:text-gray-200">Login</Link>
-              <Link to="/register" className="hover:text-gray-200">Registro</Link>
+              <Link to="/login" className="block hover:text-gray-200">Login</Link>
+              <Link to="/register" className="block hover:text-gray-200">Registro</Link>
             </>
           ) : (
-            <button onClick={handleLogout} className="hover:text-gray-200">Cerrar sesión</button>
+            <>
+              <Link to="/dashboard" className="block hover:text-gray-200">Dashboard</Link>
+              <Link to="/perfil" className="block hover:text-gray-200">Perfil</Link>
+              {token.rol === "admin" && (
+                <Link to="/admin" className="block hover:text-gray-200">Admin</Link>
+              )}
+              <button onClick={handleLogout} className="block hover:text-gray-200">Cerrar sesión</button>
+            </>
           )}
         </div>
-
       </div>
+
     </nav>
   );
 }
