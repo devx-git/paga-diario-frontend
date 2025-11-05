@@ -11,6 +11,7 @@ export default function PaymentForm() {
   const params = new URLSearchParams(location.search);
   const nivel = params.get("nivel");
   const inversion = params.get("inversion");
+  const plan_id = params.get("plan_id");
   const navigate = useNavigate();
   const [metodo, setMetodo] = useState("nequi");
   const [form, setForm] = useState({ nombre: "", celular: "", referencia: "" });
@@ -25,6 +26,7 @@ export default function PaymentForm() {
       await axiosClient.post(
         "/api/pagos",
         {
+          plan_id,
           nivel,
           inversion,
           metodo,
