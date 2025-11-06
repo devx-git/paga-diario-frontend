@@ -51,7 +51,7 @@ export default function Pagos() {
                 <td className="px-4 py-2 capitalize">{pago.metodo}</td>
                 <td className="px-4 py-2">{pago.referencia}</td>
                 <td className="px-4 py-2">
-                  <span className={`px-2 py-1 rounded text-white ${pago.estado === "aprobado" ? "bg-green-600" : "bg-yellow-500"}`}>
+                  <span className={`px-2 py-1 rounded text-white ${pago.estado === "activo" ? "bg-green-600" : "bg-yellow-500"}`}>
                     {pago.estado}
                   </span>
                 </td>
