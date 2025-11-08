@@ -3,14 +3,15 @@ import axiosClient from "../../api/axiosClient";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Pagos() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [pagos, setPagos] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPagos = async () => {
       try {
-        const res = await axiosClient.get("/api/pagos/mis-pagos", {
+        const endpoint = user?.rol === "admin" ? "/api/pagos/admin" : "/api/pagos/mis-pagos";
+        const res = await axiosClient.get(endpoint, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPagos(res.data);

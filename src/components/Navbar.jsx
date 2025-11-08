@@ -38,7 +38,7 @@ export default function Navbar() {
               <Link to="/dashboard" className="block hover:text-gray-200">Dashboard</Link>
               <Link to="/perfil" className="block hover:text-gray-200">Perfil</Link>
               {token.rol === "admin" && (
-                <Link to="/admin" className="block hover:text-gray-200">Admin</Link>
+                 <Link to="/admin/pagos" className="block hover:text-gray-200">Admin</Link>
               )}
               <button onClick={handleLogout} className="block hover:text-gray-200">Cerrar sesión</button>
             </>
