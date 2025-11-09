@@ -6,6 +6,13 @@ export default function Historial() {
   const { token, user } = useAuth();
   const [planes, setPlanes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const planesVisibles = planes.slice(indexOfFirstItem, indexOfLastItem);
+
 
   useEffect(() => {
     const fetchHistorial = async () => {
@@ -39,6 +46,7 @@ export default function Historial() {
         <table className="min-w-full text-sm text-left">
           <thead className="bg-blue-600 text-white">
             <tr>
+              <th className="px-4 py-2">#</th>
               <th className="px-4 py-2">Fecha</th>
               <th className="px-4 py-2">Plan</th>
               <th className="px-4 py-2">Inversión</th>
@@ -47,8 +55,9 @@ export default function Historial() {
             </tr>
           </thead>
           <tbody>
-            {planes.map((plan) => (
+            {planesVisibles.map((plan, index) => (
               <tr key={plan.id} className="border-b hover:bg-gray-50">
+                <td className="px-4 py-2 text-xs sm:text-sm">{indexOfFirstItem + index + 1}</td>
                 <td className="px-4 py-2 text-xs sm:text-sm">{new Date(plan.fechaFinal).toLocaleDateString()}</td>
                 <td className="px-4 py-2 text-xs sm:text-sm">Llave {plan.nivel}</td>
                 <td className="px-4 py-2 text-xs sm:text-sm">${plan.inversion}</td>
@@ -68,6 +77,20 @@ export default function Historial() {
             ))}
           </tbody>
         </table>
+          {/* ✅ Controles de paginación */}
+          <div className="flex justify-center items-center mt-4 gap-2 flex-wrap">
+            {Array.from({ length: Math.ceil(planes.length / itemsPerPage) }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`px-3 py-1 rounded border ${
+                  currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-white text-blue-600"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>

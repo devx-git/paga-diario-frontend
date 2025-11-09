@@ -145,32 +145,34 @@ export default function AdminUsers() {
       </form>
 
       <div className="overflow-x-auto">
-        <table className="w-full border text-sm">
+        <table className="min-w-full border text-xs sm:text-sm">
           <thead>
             <tr className="bg-gray-200">
+              <th className="p-2">#</th>
               <th className="p-2">Correo</th>
               <th className="p-2">Rol</th>
               <th className="p-2">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {currentUsers.map((u) => (
+            {currentUsers.map((u, index) => (
               <tr key={u.id} className="text-center border-t">
+                <td className="p-2">{indexOfFirstUser + index + 1}</td>
                 <td className="p-2">{u.correo}</td>
                 <td className="p-2">{u.rol}</td>
-                <td className="p-2">
-                  <button
-                    onClick={() => handleEdit(u)}
-                    className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => handleDelete(u.id)}
-                    className="bg-red-600 text-white px-2 py-1 rounded"
-                  >
-                    Eliminar
-                  </button>
+                <td className="p-2 flex flex-wrap justify-center gap-2">
+                   <button
+                        onClick={() => handleEdit(u)}
+                        className="bg-yellow-500 text-white px-2 py-1 rounded text-xs sm:text-sm"
+                      >
+                        Editar
+                      </button>
+                      <button
+                        onClick={() => handleDelete(u.id)}
+                        className="bg-red-600 text-white px-2 py-1 rounded text-xs sm:text-sm"
+                      >
+                        Eliminar
+                      </button>
                 </td>
               </tr>
             ))}
@@ -179,12 +181,12 @@ export default function AdminUsers() {
       </div>
 
       {/* Paginación */}
-      <div className="flex justify-center mt-4 gap-2">
+      <div className="flex justify-center mt-4 gap-2 flex-wrap">
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
             onClick={() => setCurrentPage(i + 1)}
-            className={`px-3 py-1 rounded ${
+            className={`px-3 py-1 rounded text-xs sm:text-sm ${
               currentPage === i + 1
                 ? "bg-blue-600 text-white"
                 : "bg-gray-200 text-black"

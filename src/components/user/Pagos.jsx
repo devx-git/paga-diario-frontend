@@ -6,6 +6,13 @@ export default function Pagos() {
   const { token, user } = useAuth();
   const [pagos, setPagos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const pagosVisibles = pagos.slice(indexOfFirstItem, indexOfLastItem);
+
 
   useEffect(() => {
     const fetchPagos = async () => {
@@ -34,9 +41,11 @@ export default function Pagos() {
       ) : pagos.length === 0 ? (
         <p className="text-gray-500">No se encontraron pagos registrados.</p>
       ) : (
+        <>
         <table className="min-w-full text-sm text-left">
           <thead className="bg-blue-600 text-white">
             <tr>
+              <th className="px-4 py-2">#</th>
               <th className="px-4 py-2">Fecha</th>
               <th className="px-4 py-2">Método</th>
               <th className="px-4 py-2">Referencia</th>
@@ -46,9 +55,10 @@ export default function Pagos() {
             </tr>
           </thead>
           <tbody>
-            {pagos.map((pago) => (
+            {pagosVisibles.map((pago, index) => (
               <tr key={pago.id} className="border-b hover:bg-gray-50">
-                 <td className="px-4 py-2">{new Date(pago.createdAt).toLocaleDateString()}</td>
+                <td className="px-4 py-2">{indexOfFirstItem + index + 1}</td>
+                <td className="px-4 py-2">{new Date(pago.createdAt).toLocaleDateString()}</td>
                 <td className="px-4 py-2 capitalize">{pago.metodo}</td>
                 <td className="px-4 py-2">{pago.referencia}</td>
                 <td className="px-4 py-2">
@@ -62,6 +72,22 @@ export default function Pagos() {
             ))}
           </tbody>
         </table>
+           {/* ✅ Controles de paginación */}
+              <div className="flex justify-center items-center mt-4 gap-2 flex-wrap">
+                {Array.from({ length: Math.ceil(pagos.length / itemsPerPage) }).map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`px-3 py-1 rounded border ${
+                      currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-white text-blue-600"
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+            </>
+
       )}
     </div>
   );
