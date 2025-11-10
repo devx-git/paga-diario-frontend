@@ -13,6 +13,12 @@ export default function Navbar() {
     navigate("/login");
   };
 
+  const handleNav = (path) => {
+  navigate(path);
+  setIsOpen(false); // ✅ cierra el menú
+};
+
+
   return (
     <nav className="bg-[#0F172A] text-white shadow-lg md:hidden"> {/* ✅ solo móviles */}
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
@@ -30,17 +36,24 @@ export default function Navbar() {
         <div className="p-4 space-y-4">
           {!token ? (
             <>
-              <Link to="/" className="block hover:text-gray-200">Inicio</Link>
-              <Link to="/login" className="block hover:text-gray-200">Login</Link>
-              <Link to="/register" className="block hover:text-gray-200">Registro</Link>
+              <button onClick={() => handleNav("/")} className="block text-left w-full hover:text-gray-200">Inicio</button>
+              <button onClick={() => handleNav("/login")} className="block text-left w-full hover:text-gray-200">Login</button>
+              <button onClick={() => handleNav("/register")} className="block text-left w-full hover:text-gray-200">Registro</button>
             </>
           ) : (
             <>
-              <Link to="/" className="block hover:text-gray-200">Inicio</Link>
-              <Link to="/dashboard" className="block hover:text-gray-200">Dashboard</Link>
-              <Link to="/perfil" className="block hover:text-gray-200">Perfil</Link>
+              <button onClick={() => handleNav("/")} className="block text-left w-full hover:text-gray-200">Inicio</button>
+              <button onClick={() => handleNav("/dashboard")} className="block text-left w-full hover:text-gray-200">
+                Dashboard
+              </button>
+              <button onClick={() => handleNav("/perfil")} className="block text-left w-full hover:text-gray-200">
+                Perfil
+              </button>
+
               {user?.rol === "admin" && (
-                <Link to="/admin/pagos" className="block hover:text-gray-200">Admin</Link>
+                <button onClick={() => handleNav("/admin/metrics")} className="block text-left w-full hover:text-gray-200">
+                  Admin
+                </button>
               )}
 
               <button onClick={handleLogout} className="block hover:text-gray-200">Cerrar sesión</button>
@@ -53,8 +66,4 @@ export default function Navbar() {
   );
 }
 
-const handleNav = (path) => {
-  navigate(path);
-  setIsOpen(false); // ✅ cierra el menú
-};
 
