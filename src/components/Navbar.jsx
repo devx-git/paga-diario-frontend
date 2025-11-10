@@ -5,7 +5,7 @@ import { Logo } from "./Logo";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { token, logout } = useAuth();
+  const { token, user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -30,16 +30,19 @@ export default function Navbar() {
         <div className="p-4 space-y-4">
           {!token ? (
             <>
+              <Link to="/" className="block hover:text-gray-200">Inicio</Link>
               <Link to="/login" className="block hover:text-gray-200">Login</Link>
               <Link to="/register" className="block hover:text-gray-200">Registro</Link>
             </>
           ) : (
             <>
+              <Link to="/" className="block hover:text-gray-200">Inicio</Link>
               <Link to="/dashboard" className="block hover:text-gray-200">Dashboard</Link>
               <Link to="/perfil" className="block hover:text-gray-200">Perfil</Link>
-              {token.rol === "admin" && (
-                 <Link to="/admin/pagos" className="block hover:text-gray-200">Admin</Link>
+              {user?.rol === "admin" && (
+                <Link to="/admin/pagos" className="block hover:text-gray-200">Admin</Link>
               )}
+
               <button onClick={handleLogout} className="block hover:text-gray-200">Cerrar sesión</button>
             </>
           )}
@@ -49,3 +52,9 @@ export default function Navbar() {
     </nav>
   );
 }
+
+const handleNav = (path) => {
+  navigate(path);
+  setIsOpen(false); // ✅ cierra el menú
+};
+

@@ -17,8 +17,8 @@ export default function Homepage() {
   return (
     
     <div className="flex flex-col min-h-screen bg-gray-50">
-      <Navbar />
-      <Header />
+      {/* <Navbar />
+      <Header /> */}
       <main className="flex-grow">
         {/* Hero */}
         <section className="flex flex-col items-center justify-center text-center px-4 py-20 bg-[#0F172A] text-white">
