@@ -58,7 +58,7 @@ export default function Dashboard() {
             <p>Total acumulado: <strong>${plan.total}</strong></p>
             <button
               className="mt-3 bg-[#D4AF37] text-[#0F172A] px-4 py-2 rounded font-semibold"
-              onClick={() => comprarPlan(plan.id)}
+              onClick={() => comprarPlan(plan)}
             >
               Comprar Plan
             </button>

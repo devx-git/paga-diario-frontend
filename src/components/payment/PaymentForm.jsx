@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axiosClient from "../../api/axiosClient";
 import QrSelector from "./QrSelector";
@@ -7,39 +7,54 @@ import { useNavigate } from "react-router-dom";
 
 export default function PaymentForm() {
   const { token } = useAuth();
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const nivel = params.get("nivel");
-  const inversion = params.get("inversion");
-  const plan_id = params.get("plan_id");
   const navigate = useNavigate();
   const [metodo, setMetodo] = useState("nequi");
   const [form, setForm] = useState({ nombre: "", celular: "", referencia: "" });
   const [msg, setMsg] = useState("");
+  const [planSeleccionado, setPlanSeleccionado] = useState(null);
+
+  // ✅ Recuperar el plan desde localStorage
+  useEffect(() => {
+    const storedPlan = localStorage.getItem("planSeleccionado");
+    if (storedPlan) {
+      setPlanSeleccionado(JSON.parse(storedPlan));
+    }
+  }, []);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const plan_id = planSeleccionado?.id || 0;
+
+    // ✅ Validación completa
+    if (!form.nombre || !form.celular || !form.referencia || plan_id === 0) {
+      setMsg("❌ Todos los campos son obligatorios y debes seleccionar un plan válido");
+      return;
+    }
+
+    const datos = {
+      metodo,
+      referencia: form.referencia,
+      nombre: form.nombre,
+      celular: form.celular,
+      plan_id: Number(plan_id)
+    };
+
+    console.log("📤 Enviando datos:", datos);
+
     try {
-      await axiosClient.post(
-        "/api/pagos",
-        {
-          plan_id,
-          nivel,
-          inversion,
-          metodo,
-          ...form,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axiosClient.post("/api/pagos", datos, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setMsg("✅ Pago registrado. Tu plan se activará en breve.");
-      // ✅ Redirige al perfil después de 1.5 segundos
       setTimeout(() => {
-      navigate("/perfil");
+        navigate("/perfil");
       }, 1500);
-    } catch {
+    } catch (error) {
+      console.error("❌ Error al registrar el pago:", error);
       setMsg("❌ Error al registrar el pago");
     }
   };
@@ -47,6 +62,16 @@ export default function PaymentForm() {
   return (
     <div className="max-w-xl mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Realizar pago</h2>
+
+      {/* ✅ Mostrar resumen del plan si está disponible */}
+      {planSeleccionado && (
+        <div className="mb-4 p-3 bg-gray-100 rounded text-gray-800">
+          <p><strong>Plan:</strong> Llave {planSeleccionado.numero}</p>
+          <p><strong>Inversión:</strong> ${planSeleccionado.inversion}</p>
+          <p><strong>Ganancia mensual:</strong> ${planSeleccionado.ganancia}</p>
+        </div>
+      )}
+
       <div className="mb-4">
         <label className="block mb-2 font-semibold">Método de pago</label>
         <select
