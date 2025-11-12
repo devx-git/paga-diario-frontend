@@ -18,8 +18,10 @@ export default function PaymentForm() {
     const storedPlan = localStorage.getItem("planSeleccionado");
     if (storedPlan) {
       setPlanSeleccionado(JSON.parse(storedPlan));
+    } else {
+    setMsg("❌ No se ha seleccionado ningún plan");
     }
-  }, []);
+    }, []);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
