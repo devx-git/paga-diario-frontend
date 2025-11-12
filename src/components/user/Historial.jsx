@@ -28,10 +28,28 @@ const Historial = () => {
                 {typeof pago.monto === "number" ? `$${pago.monto.toLocaleString()}` : pago.monto}
               </td>
               <td className="px-4 py-2">
-                {pago.estado === "activo"
-                  ? `Goteando (${pago.dias_transcurridos}/30) - $${pago.ganancia_acumulada}`
-                  : `$${pago.ganancia_acumulada}`}
+                {pago.estado === "activo" ? (
+                  <>
+                    <div className="font-medium text-gray-700">
+                      Goteando (${pago.ganancia_acumulada})  
+                    </div>
+                    <div className="w-full bg-gray-200 rounded h-2 mt-1">
+                      <div
+                        className="bg-blue-500 h-2 rounded transition-all duration-500"
+                        style={{ width: `${(pago.dias_transcurridos / 30) * 100}%` }}
+                      ></div>
+                    </div>
+                    <small className="text-xs text-gray-600 block mt-1">
+                      {pago.dias_transcurridos}/30 días
+                    </small>
+                  </>
+                ) : (
+                  <span className="text-gray-800 font-medium">
+                    ${pago.ganancia_acumulada}
+                  </span>
+                )}
               </td>
+
               <td className="px-4 py-2">
                 {pago.estado === "completado" ? (
                   <div className="flex gap-1 flex-wrap">
