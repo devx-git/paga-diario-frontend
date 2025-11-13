@@ -1,11 +1,18 @@
 import { useState } from "react";
 import useHistorialGoteo from "../../hooks/useHistorialGoteo";
 import ModalRetiro from "./ModalRetiro"; 
+import ModalInvertir from "./ModalInvertir";
+import ModalReinvertir from "./ModalReinvertir";
+
 
 const Historial = () => {
   const { historial, cargando } = useHistorialGoteo();
   const [modalPago, setModalPago] = useState(null);
   const [pagosRetirados, setPagosRetirados] = useState([]);
+  const [modalInvertir, setModalInvertir] = useState(null);
+  const [modalReinvertir, setModalReinvertir] = useState(null);
+
+
 
   
      // ✅ Define aquí las funciones antes del return
@@ -18,7 +25,7 @@ const Historial = () => {
   const handleCancelar = () => {
     setModalPago(null);
   };
-  
+
   if (cargando) return <p className="text-center">Cargando historial...</p>;
   return (
       <>
@@ -29,6 +36,14 @@ const Historial = () => {
           onSuccess={handleRetiroExitoso}
           onCancel={handleCancelar}
         />
+      )}
+
+      {modalInvertir && (
+        <ModalInvertir pago={modalInvertir} onClose={() => setModalInvertir(null)} />
+      )}
+
+      {modalReinvertir && (
+        <ModalReinvertir pago={modalReinvertir} onClose={() => setModalReinvertir(null)} />
       )}
 
      <div className="overflow-x-auto">
@@ -89,8 +104,20 @@ const Historial = () => {
                     >
                       Retirar
                     </button>
-                    <button className="bg-blue-600 text-white px-2 py-1 rounded">Invertir</button>
-                    <button className="bg-yellow-500 text-white px-2 py-1 rounded">Reinvertir</button>
+                    <button
+                      className="bg-blue-600 text-white px-2 py-1 rounded"
+                      onClick={() => setModalInvertir(pago)}
+                    >
+                      Invertir
+                    </button>
+
+                    <button
+                      className="bg-yellow-500 text-white px-2 py-1 rounded"
+                      onClick={() => setModalReinvertir(pago)}
+                    >
+                      Reinvertir
+                    </button>
+
                   </div>
                 ) : pago.estado === "incompleto" ? (
                   <span className="text-red-500">Incompleto</span>
