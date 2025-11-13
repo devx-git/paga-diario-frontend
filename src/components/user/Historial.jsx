@@ -1,12 +1,37 @@
+import { useState } from "react";
 import useHistorialGoteo from "../../hooks/useHistorialGoteo";
+import ModalRetiro from "./ModalRetiro"; 
 
 const Historial = () => {
   const { historial, cargando } = useHistorialGoteo();
+  const [modalPago, setModalPago] = useState(null);
+  const [pagosRetirados, setPagosRetirados] = useState([]);
 
+  
+     // ✅ Define aquí las funciones antes del return
+  const handleRetiroExitoso = (pagoId) => {
+    setPagosRetirados((prev) => [...prev, pagoId]);
+    setModalPago(null);
+    alert("✅ Retiro realizado correctamente");
+  };
+
+  const handleCancelar = () => {
+    setModalPago(null);
+  };
+  
   if (cargando) return <p className="text-center">Cargando historial...</p>;
-
   return (
-    <div className="overflow-x-auto">
+      <>
+      {/* ✅ Modal dentro del JSX */}
+        {modalPago && (
+        <ModalRetiro
+          pago={modalPago}
+          onSuccess={handleRetiroExitoso}
+          onCancel={handleCancelar}
+        />
+      )}
+
+     <div className="overflow-x-auto">
       <table className="min-w-full bg-white rounded shadow text-sm md:text-base">
         <thead className="bg-blue-600 text-white">
           <tr>
@@ -53,7 +78,17 @@ const Historial = () => {
               <td className="px-4 py-2">
                 {pago.estado === "completado" ? (
                   <div className="flex gap-1 flex-wrap">
-                    <button className="bg-green-600 text-white px-2 py-1 rounded">Retirar</button>
+                    <button
+                      className={`px-2 py-1 rounded ${
+                        pagosRetirados.includes(pago.pago_id)
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-green-600 text-white"
+                      }`}
+                      onClick={() => setModalPago(pago)}
+                      disabled={pagosRetirados.includes(pago.pago_id)}
+                    >
+                      Retirar
+                    </button>
                     <button className="bg-blue-600 text-white px-2 py-1 rounded">Invertir</button>
                     <button className="bg-yellow-500 text-white px-2 py-1 rounded">Reinvertir</button>
                   </div>
@@ -68,6 +103,7 @@ const Historial = () => {
         </tbody>
       </table>
     </div>
+    </>
   );
 };
 
