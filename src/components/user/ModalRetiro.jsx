@@ -5,6 +5,7 @@ const ModalRetiro = ({ pago, onSuccess, onCancel }) => {
   const [titular, setTitular] = useState("");
   const [tipoCuenta, setTipoCuenta] = useState("");
   const [numeroCuenta, setNumeroCuenta] = useState("");
+  const [banco, setBanco] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,7 +16,8 @@ const ModalRetiro = ({ pago, onSuccess, onCancel }) => {
         titular,
         tipo_cuenta: tipoCuenta,
         numero_cuenta: numeroCuenta,
-        monto: pago.ganancia_acumulada
+        monto: pago.ganancia_acumulada,
+         ...(banco && { banco }) // solo se envía si existe
         }, {
         headers: { Authorization: `Bearer ${token}` }
         });
@@ -58,6 +60,21 @@ const ModalRetiro = ({ pago, onSuccess, onCancel }) => {
             <option value="daviplata">Daviplata</option>
           </select>
         </label>
+
+        {["ahorros", "corriente"].includes(tipoCuenta) && (
+          <label className="block mb-2">
+            Banco:
+            <input
+              type="text"
+              className="w-full border p-2 rounded"
+              value={banco}
+              onChange={(e) => setBanco(e.target.value)}
+              placeholder="Ej: Bancolombia, Davivienda"
+              required
+            />
+          </label>
+        )}
+
 
         <label className="block mb-2">
           Número de cuenta o celular:
