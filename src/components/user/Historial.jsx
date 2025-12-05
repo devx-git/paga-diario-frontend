@@ -11,6 +11,8 @@ const Historial = () => {
   const [pagosRetirados, setPagosRetirados] = useState([]);
   const [modalInvertir, setModalInvertir] = useState(null);
   const [modalReinvertir, setModalReinvertir] = useState(null);
+  const [accionesDesactivadas, setAccionesDesactivadas] = useState({});
+
 
 
 
@@ -25,6 +27,21 @@ const Historial = () => {
   const handleCancelar = () => {
     setModalPago(null);
   };
+
+  const handleAccion = (pagoId, tipoAccion) => {
+  // Aquí puedes abrir el modal según la acción
+  if (tipoAccion === "retirar") {
+    setModalPago(historial.find(p => p.pago_id === pagoId));
+  } else if (tipoAccion === "invertir") {
+    setModalInvertir(historial.find(p => p.pago_id === pagoId));
+  } else if (tipoAccion === "reinvertir") {
+    setModalReinvertir(historial.find(p => p.pago_id === pagoId));
+  }
+
+  // ✅ Desactivar botones para ese pago
+  setAccionesDesactivadas(prev => ({ ...prev, [pagoId]: true }));
+};
+
 
   if (cargando) return <p className="text-center">Cargando historial...</p>;
   return (
@@ -91,40 +108,41 @@ const Historial = () => {
               </td>
 
               <td className="px-4 py-2">
-                {pago.estado === "completado" ? (
-                  <div className="flex gap-1 flex-wrap">
-                    <button
-                      className={`px-2 py-1 rounded ${
-                        pagosRetirados.includes(pago.pago_id)
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-green-600 text-white"
-                      }`}
-                      onClick={() => setModalPago(pago)}
-                      disabled={pagosRetirados.includes(pago.pago_id)}
-                    >
-                      Retirar
-                    </button>
-                    <button
-                      className="bg-blue-600 text-white px-2 py-1 rounded"
-                      onClick={() => setModalInvertir(pago)}
-                    >
-                      Invertir
-                    </button>
+  {pago.estado === "completado" ? (
+    <div className="flex gap-1 flex-wrap">
+      {!accionesDesactivadas[pago.pago_id] && (
+        <>
+          <button
+            className="bg-green-600 text-white px-2 py-1 rounded"
+            onClick={() => handleAccion(pago.pago_id, "retirar")}
+          >
+            Retirar
+          </button>
+          <button
+            className="bg-blue-600 text-white px-2 py-1 rounded"
+            onClick={() => handleAccion(pago.pago_id, "invertir")}
+          >
+            Invertir
+          </button>
+          <button
+            className="bg-yellow-500 text-white px-2 py-1 rounded"
+            onClick={() => handleAccion(pago.pago_id, "reinvertir")}
+          >
+            Reinvertir
+          </button>
+        </>
+      )}
+      {accionesDesactivadas[pago.pago_id] && (
+        <span className="text-gray-400">Acción realizada</span>
+      )}
+    </div>
+  ) : pago.estado === "incompleto" ? (
+    <span className="text-red-500">Incompleto</span>
+  ) : (
+    <span className="text-gray-500">En progreso</span>
+  )}
+</td>
 
-                    <button
-                      className="bg-yellow-500 text-white px-2 py-1 rounded"
-                      onClick={() => setModalReinvertir(pago)}
-                    >
-                      Reinvertir
-                    </button>
-
-                  </div>
-                ) : pago.estado === "incompleto" ? (
-                  <span className="text-red-500">Incompleto</span>
-                ) : (
-                  <span className="text-gray-500">En progreso</span>
-                )}
-              </td>
             </tr>
           ))}
         </tbody>
