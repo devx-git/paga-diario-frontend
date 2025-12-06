@@ -106,43 +106,40 @@ const Historial = () => {
                   </span>
                 )}
               </td>
-
-              <td className="px-4 py-2">
-  {pago.estado === "completado" ? (
-    <div className="flex gap-1 flex-wrap">
-      {!accionesDesactivadas[pago.pago_id] && (
-        <>
-          <button
-            className="bg-green-600 text-white px-2 py-1 rounded"
-            onClick={() => handleAccion(pago.pago_id, "retirar")}
-          >
-            Retirar
-          </button>
-          <button
-            className="bg-blue-600 text-white px-2 py-1 rounded"
-            onClick={() => handleAccion(pago.pago_id, "invertir")}
-          >
-            Invertir
-          </button>
-          <button
-            className="bg-yellow-500 text-white px-2 py-1 rounded"
-            onClick={() => handleAccion(pago.pago_id, "reinvertir")}
-          >
-            Reinvertir
-          </button>
-        </>
-      )}
-      {accionesDesactivadas[pago.pago_id] && (
-        <span className="text-gray-400">Acción realizada</span>
-      )}
-    </div>
-  ) : pago.estado === "incompleto" ? (
-    <span className="text-red-500">Incompleto</span>
-  ) : (
-    <span className="text-gray-500">En progreso</span>
-  )}
-</td>
-
+            <td className="px-4 py-2">
+                {pago.estado === "completado" ? (
+                  <div className="flex gap-1 flex-wrap">
+                    <button
+                      className="bg-green-600 text-white px-2 py-1 rounded"
+                      onClick={() => setModalPago(pago)}
+                    >
+                      Retirar
+                    </button>
+                    <button
+                      className="bg-blue-600 text-white px-2 py-1 rounded"
+                      onClick={() => setModalInvertir(pago)}
+                    >
+                      Invertir
+                    </button>
+                    <button
+                      className="bg-yellow-500 text-white px-2 py-1 rounded"
+                      onClick={() => setModalReinvertir(pago)}
+                    >
+                      Reinvertir
+                    </button>
+                  </div>
+                ) : pago.estado === "retirado" ? (
+                  <span className="text-gray-500">Retirado</span>
+                ) : pago.estado === "invertido" ? (
+                  <span className="text-blue-500">Invertido</span>
+                ) : pago.estado === "reinvertido" ? (
+                  <span className="text-yellow-600">Reinvertido</span>
+                ) : pago.estado === "incompleto" ? (
+                  <span className="text-red-500">Incompleto</span>
+                ) : (
+                  <span className="text-gray-500">En progreso</span>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
